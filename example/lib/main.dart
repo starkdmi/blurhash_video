@@ -47,10 +47,13 @@ class _HomePageState extends State<HomePage> {
   int _sequenceSize = 0;
 
   @override
-  void dispose() {
+  void dispose() async {
     super.dispose();
     _gblurController?.dispose();
     _sequenceController?.dispose();
+    if (_directory?.existsSync() == true) {
+      await _directory?.delete(recursive: true);
+    } 
   }
 
   void _process() async {
