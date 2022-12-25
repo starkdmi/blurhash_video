@@ -2,8 +2,7 @@
 [Blurhash](https://github.com/woltapp/blurhash/) algorithm applied to sequence of images extracted from video file
 
 ## Preview
-
-<video src='https://user-images.githubusercontent.com/21260939/209480508-4a372ae0-c4d5-4d92-82e8-305bea7838e4.mp4'></video>
+[Video preview](https://user-images.githubusercontent.com/21260939/209480508-4a372ae0-c4d5-4d92-82e8-305bea7838e4.mp4)
 
 ## Getting started
 
