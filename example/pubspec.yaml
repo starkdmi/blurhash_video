@@ -12,12 +12,12 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   image_sequence_animator: ^2.0.0
-  video_player: 2.4.10
-  path_provider: 2.0.11
-  file_picker: 5.2.4
-  image: 3.2.2
-  blurhash_dart: 1.1.0
-  ffmpeg_kit_flutter_full_gpl: 5.1.0 
+  video_player: ^2.4.10
+  path_provider: ^2.0.11
+  file_picker: ^5.2.4
+  image: ^3.2.2
+  blurhash_dart: ^1.1.0
+  ffmpeg_kit_flutter_full_gpl: ^5.1.0 
   blurhash_video: 
     path: ../
 

@@ -1,7 +1,7 @@
 name: blurhash_video
 description: Generate blur hashes for an entire video file
+repository: https://github.com/starkdmi/blurhash_video
 version: 0.0.1
-homepage:
 
 environment:
   sdk: '>=2.18.6 <3.0.0'
@@ -12,15 +12,15 @@ dependencies:
     sdk: flutter
 
   # File IO
-  path: 1.8.2
-  path_provider: 2.0.11
+  path: ^1.8.2
+  path_provider: ^2.0.11
 
   # Image manipulation
-  image: 3.2.2
-  blurhash_dart: 1.1.0
+  image: ^3.2.2
+  blurhash_dart: ^1.1.0
 
   # Video processing
-  ffmpeg_kit_flutter_full_gpl: 5.1.0 
+  ffmpeg_kit_flutter_full_gpl: ^5.1.0 
   
 dev_dependencies:
   flutter_test:

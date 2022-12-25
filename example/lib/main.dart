@@ -10,28 +10,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:image_sequence_animator/image_sequence_animator.dart';
 import 'package:video_player/video_player.dart';
 
-/*
-1. blurhash_video 
-  - hashes.txt is about 20 KB
-  - generated blur images are 500KB (cache - can be regenerated, blur%05d.png)
-maybe different rendering option is possible (using flutter_blurhash with fps 16 is too flickering)
-displaying as images is available on all the platforms
-
-2. ffmpeg gaussian blur filter 
-ffmpeg -i testvideo.mp4 -vf "gblur=sigma=6:steps=5" test_blur.mp4
-  - blurred.mp4 is about 20KB
-
-3. animated webp from blurred images
-ffmpeg -i blur%d.png -c:v libwebp_anim blurred.webp
-  - blurred.webp is 60KB
-
-4. gif from blurred images
-  - blurred.gif - 500KB
-
-5. low res video 
-  - scale down video to 64x36 and remove audio - 40 KB
-*/
-
 void main() {
   runApp(const App());
 }
@@ -182,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                     isAutoPlay: true,
                   ),
                 ),
-              ),
+              )
             ],
 
             // MP4 from image sequence
@@ -206,7 +184,9 @@ class _HomePageState extends State<HomePage> {
               ]
           ]
           else 
-            const Center(child: Text("Select a video")),
+            const Center(child: 
+              Text("Select a video", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18))
+            ),
         ],
       ),
       floatingActionButton: FloatingActionButton(

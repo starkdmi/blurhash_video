@@ -1,6 +1,6 @@
-# example
+# Example
 
-A new Flutter project.
+Blurhash Video Example Project
 
 ## Getting Started
 
