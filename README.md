@@ -1,39 +1,21 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+## About
+[Blurhash](https://github.com/woltapp/blurhash/) algorithm applied to sequence of images extracted from video file
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+## Preview
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+<video src='https://user-images.githubusercontent.com/21260939/209480508-4a372ae0-c4d5-4d92-82e8-305bea7838e4.mp4'></video>
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Include latest version from [pub.dev](https://pub.dev/packages/blurhash_video) to `pubspec.yaml`
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
-
 ```dart
-const like = 'sample';
+// generate sorted list of blurhashes from video 
+final hashes = await BlurhashVideo.generateBlurHashes(
+  path: path, // video file location 
+  fps: 24, // video fps is used by default
+  duration: 7, // in seconds
+);
 ```
-
-## Additional information
-
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
