@@ -6,7 +6,7 @@ import 'dart:collection';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:blurhash_dart/blurhash_dart.dart';
-import 'package:image/image.dart' as img;
+import 'package:image/image.dart';
 import 'package:ffmpeg_kit_flutter_full_gpl/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter_full_gpl/return_code.dart';
 
@@ -36,12 +36,12 @@ class BlurhashVideo {
     await directory.create();
 
     // run ffmpeg command 
-    final session = await FFmpegKit.execute(""" -hide_banner $path ${duration == null ? "" : "-t $duration"} ${fps == null ? "" : "-vf fps=$fps"} -vf "scale='if(gt(iw,ih),$res,-1)':'if(gt(iw,ih),-1,$res)'" -lossless 1 -quality 100 -pix_fmt rgb24 $destination/%d.png """);
+    final command = """ -hide_banner -i "$path" ${duration == null ? "" : "-t $duration"} ${fps == null ? "" : "-vf fps=$fps"} -vf "scale='if(gt(iw,ih),$res,-1)':'if(gt(iw,ih),-1,$res)'" -lossless 1 -quality 100 -pix_fmt rgb24 "$destination/%d.png" """;
+    final session = await FFmpegKit.execute(command);
     
     final returnCode = await session.getReturnCode();
     if (!ReturnCode.isSuccess(returnCode)) {
-      // print(await session.getOutput());
-      throw "ffmpeg error";
+      throw "ffmpeg error: ${await session.getOutput()}";
     }
 
     // loop generated images
@@ -54,10 +54,10 @@ class BlurhashVideo {
 
       // read image
       final bytes = await file.readAsBytes();
-      var image = img.decodePng(bytes);
+      var image = decodePng(bytes);
       if (image == null) continue; 
 
-      // calculate components depending on resolution and rotation
+      // calculate components depending on resolution and rotation/orientation
       final x = sqrt(16.0 * image.width / image.height);
       final y = x * image.height / image.width;
       final numCompX = min(x.toInt() + 1, 9);
