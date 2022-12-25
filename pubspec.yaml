@@ -1,7 +1,7 @@
 name: blurhash_video
-description: Generate blur hashes for an entire video file
+description: Blurhash algorithm applied to sequence of images extracted from video file
 repository: https://github.com/starkdmi/blurhash_video
-version: 0.0.1
+version: 0.0.3
 
 environment:
   sdk: '>=2.18.6 <3.0.0'
@@ -25,5 +25,5 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-    
+
   flutter_lints: ^2.0.0
