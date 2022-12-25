@@ -21,7 +21,7 @@ class BlurhashVideo {
   static Future<List<String>> generateBlurHashes({
     required String path, String? workingDirectory, int? fps, int? duration, int res = 64
   }) async {
-    SplayTreeMap<String, String> hashes = SplayTreeMap<String, String>();
+    SplayTreeMap<int, String> hashes = SplayTreeMap<int, String>();
 
     // temporary directory to save images
     Directory temp;
@@ -51,6 +51,7 @@ class BlurhashVideo {
 
       // extract id from 10.png format
       final id = basename(file.path).split(".").first;
+      final index = int.parse(id);
 
       // read image
       final bytes = await file.readAsBytes();
@@ -65,7 +66,7 @@ class BlurhashVideo {
       
       // generate hash 
       final hash = BlurHash.encode(image, numCompX: numCompX, numCompY: numCompY);
-      hashes[id] = hash.hash;
+      hashes[index] = hash.hash;
     }
 
     // clean up 
