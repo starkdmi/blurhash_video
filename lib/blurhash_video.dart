@@ -17,9 +17,9 @@ class BlurhashVideo {
   /// [workingDirectory] used for storing temporary image files, `getTemporaryDirectory()` used by default
   /// [fps] used to specify how many hashes per second will be proceed, default to video fps
   /// [duration] allows to cut video to specified lenght before processing, positive in seconds
-  /// [res] is widest side of thumbnail created from video, range from 32 to 64 pixels is enough because blurhash store just a bit of data after processing
+  /// [resolution] is widest side of thumbnail created from video, range from 32 to 64 pixels is enough because blurhash store just a bit of data after processing
   static Future<List<String>> generateBlurHashes({
-    required String path, String? workingDirectory, int? fps, int? duration, int res = 64
+    required String path, String? workingDirectory, int? fps, int? duration, int resolution = 64
   }) async {
     SplayTreeMap<int, String> hashes = SplayTreeMap<int, String>();
 
@@ -36,7 +36,7 @@ class BlurhashVideo {
     await directory.create();
 
     // run ffmpeg command 
-    final command = """ -hide_banner -i "$path" ${duration == null ? "" : "-t $duration"} ${fps == null ? "" : "-vf fps=$fps"} -vf "scale='if(gt(iw,ih),$res,-1)':'if(gt(iw,ih),-1,$res)'" -lossless 1 -quality 100 -pix_fmt rgb24 "$destination/%d.png" """;
+    final command = """ -hide_banner -i "$path" ${duration == null ? "" : "-t $duration"} ${fps == null ? "" : "-vf fps=$fps"} -vf "scale='if(gt(iw,ih),$resolution,-1)':'if(gt(iw,ih),-1,$resolution)'" -lossless 1 -quality 100 -pix_fmt rgb24 "$destination/%d.png" """;
     final session = await FFmpegKit.execute(command);
     
     final returnCode = await session.getReturnCode();
