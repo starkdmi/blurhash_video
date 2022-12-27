@@ -82,12 +82,14 @@ class BlurhashVideo {
     return hashes.values.toList();
   }
 
-  /// Delete all temporary created by this package directories and files 
+  /// Delete all temporary created by this package directories and files
   /// May be used for clearing after application crashed
   /// * [workingDirectory] should be the same directory used for running [generateBlurHashes] function
-  /// 
+  ///
   /// **Warning**: will delete all directories in [workingDirectory] starting with `blurhash_video_temp`
-  static Future<void> cleanUp({ Directory? workingDirectory, }) async {
+  static Future<void> cleanUp({
+    Directory? workingDirectory,
+  }) async {
     Directory temp;
     if (workingDirectory != null) {
       temp = workingDirectory;
@@ -98,7 +100,8 @@ class BlurhashVideo {
     // lookup directories in format "${temp.path}/blurhash_video_$timestamp"
     await for (final entry in temp.list()) {
       // filter files and wrong directories
-      if (entry is! Directory || !basename(entry.path).startsWith("blurhash_video_temp_")) continue;
+      if (entry is! Directory ||
+          !basename(entry.path).startsWith("blurhash_video_temp_")) continue;
 
       // delete the directory and all files in it
       await entry.delete(recursive: true);
