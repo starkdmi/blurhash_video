@@ -37,9 +37,14 @@ class BlurhashVideo {
     final directory = Directory(destination);
     await directory.create();
 
+    // setup options
+    final time = duration == null ? "" : "-t $duration";
+    final frames = fps == null ? "" : "-vf fps=$fps";
+    final size = "-vf \"scale='if(gt(iw,ih),$resolution,-1)':'if(gt(iw,ih),-1,$resolution)'\"";
+    const quality = "-lossless 1 -quality 100 -pix_fmt rgb24";
+
     // run ffmpeg command
-    final command =
-        """ -hide_banner -i "$path" ${duration == null ? "" : "-t $duration"} ${fps == null ? "" : "-vf fps=$fps"} -vf "scale='if(gt(iw,ih),$resolution,-1)':'if(gt(iw,ih),-1,$resolution)'" -lossless 1 -quality 100 -pix_fmt rgb24 "$destination/%d.png" """;
+    final command = "-hide_banner -i \"$path\" $time $frames $size $quality \"$destination/%d.png\"";
     final session = await FFmpegKit.execute(command);
 
     final returnCode = await session.getReturnCode();
@@ -82,7 +87,7 @@ class BlurhashVideo {
     return hashes.values.toList();
   }
 
-  /// Delete all temporary created by this package directories and files
+  /// Delete all temporary directories and files created by this package
   /// May be used for clearing after application crashed
   /// * [workingDirectory] should be the same directory used for running [generateBlurHashes] function
   ///
