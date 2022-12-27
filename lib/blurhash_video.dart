@@ -13,13 +13,13 @@ import 'package:ffmpeg_kit_flutter_full_gpl/return_code.dart';
 /// Blurhash algorithm applied to video files using ffmpeg
 class BlurhashVideo {
   /// Generate sequence of blurhashes from video file [path]
-  /// [workingDirectory] used for storing temporary image files, `getTemporaryDirectory()` used by default
-  /// [fps] used to specify how many hashes per second will be proceed, default to video fps
-  /// [duration] allows to cut video to specified lenght before processing, positive in seconds
-  /// [resolution] is widest side of thumbnail created from video, range from 32 to 64 pixels is enough because blurhash store just a bit of data after processing
+  /// * [workingDirectory] used for storing temporary image files, `getTemporaryDirectory()` used by default
+  /// * [fps] used to specify how many hashes per second will be proceed, default to video fps
+  /// * [duration] allows to cut video to specified lenght before processing, positive in seconds
+  /// * [resolution] is widest side of thumbnail created from video, range from 32 to 64 pixels is enough because blurhash store just a bit of data after processing
   static Future<List<String>> generateBlurHashes(
       {required String path,
-      String? workingDirectory,
+      Directory? workingDirectory,
       int? fps,
       int? duration,
       int resolution = 64}) async {
@@ -28,12 +28,12 @@ class BlurhashVideo {
     // temporary directory to save images
     Directory temp;
     if (workingDirectory != null) {
-      temp = Directory(workingDirectory);
+      temp = workingDirectory;
     } else {
       temp = await getTemporaryDirectory();
     }
     final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final destination = "${temp.path}/blurhash_video_$timestamp";
+    final destination = "${temp.path}/blurhash_video_temp_$timestamp";
     final directory = Directory(destination);
     await directory.create();
 
@@ -44,6 +44,9 @@ class BlurhashVideo {
 
     final returnCode = await session.getReturnCode();
     if (!ReturnCode.isSuccess(returnCode)) {
+      // remove temp directory and files
+      await directory.delete(recursive: true);
+      // produce ffmpeg output as exception
       throw "ffmpeg error: ${await session.getOutput()}";
     }
 
@@ -77,5 +80,28 @@ class BlurhashVideo {
     await directory.delete(recursive: true);
 
     return hashes.values.toList();
+  }
+
+  /// Delete all temporary created by this package directories and files 
+  /// May be used for clearing after application crashed
+  /// * [workingDirectory] should be the same directory used for running [generateBlurHashes] function
+  /// 
+  /// **Warning**: will delete all directories in [workingDirectory] starting with `blurhash_video_temp`
+  static Future<void> cleanUp({ Directory? workingDirectory, }) async {
+    Directory temp;
+    if (workingDirectory != null) {
+      temp = workingDirectory;
+    } else {
+      temp = await getTemporaryDirectory();
+    }
+
+    // lookup directories in format "${temp.path}/blurhash_video_$timestamp"
+    await for (final entry in temp.list()) {
+      // filter files and wrong directories
+      if (entry is! Directory || !basename(entry.path).startsWith("blurhash_video_temp_")) continue;
+
+      // delete the directory and all files in it
+      await entry.delete(recursive: true);
+    }
   }
 }
