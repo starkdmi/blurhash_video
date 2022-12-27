@@ -65,8 +65,12 @@ class _HomePageState extends State<HomePage> {
       _count = 0;
       _directory = null;
     });
-
+    
     final temp = await getTemporaryDirectory();
+    print(temp.path);
+
+    // clean all previously produced cache directories
+    // await BlurhashVideo.cleanUp(workingDirectory: temp);
 
     final result = await FilePicker.platform.pickFiles(type: FileType.video);
     final path = result?.files.first.path;
@@ -74,7 +78,7 @@ class _HomePageState extends State<HomePage> {
 
     final hashes = await BlurhashVideo.generateBlurHashes(
       path: path, 
-      workingDirectory: temp.path,
+      workingDirectory: temp,
       fps: 24, // video fps is used by default
       duration: 7, // in seconds
       resolution: 64, // pixels
