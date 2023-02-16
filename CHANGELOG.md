@@ -25,6 +25,6 @@
 ## 0.0.6
 
 * Fix multiple filters in ffmpeg command bug
+* Fix input video fps upscaling
 * Increase processing speed by setting compression_level to 50
 * Option to set custom quality
-* Fix input video fps upscaling
