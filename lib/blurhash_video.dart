@@ -17,7 +17,7 @@ class BlurhashVideo {
   /// * [fps] used to specify how many hashes per second will be proceed, default to video fps
   /// * [duration] allows to cut video to specified lenght before processing, positive in seconds
   /// * [resolution] is widest side of thumbnail created from video, range from 32 to 64 pixels is enough because blurhash store just a bit of data after processing
-  /// * [quality] is quality of PNG thumbnails, values in range `[0-100]`
+  /// * [quality] is quality of PNG thumbnails, values in range `[0, 100]`
   static Future<List<String>> generateBlurHashes(
       {required String path,
       Directory? workingDirectory,
