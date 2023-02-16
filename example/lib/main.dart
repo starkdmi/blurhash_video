@@ -82,6 +82,7 @@ class _HomePageState extends State<HomePage> {
       fps: 24, // video fps is used by default
       duration: 7, // in seconds
       resolution: 64, // pixels
+      quality: 75, // from 0 to 100, bigger is better
     );
 
     // temporary directory for blurred images

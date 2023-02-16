@@ -17,12 +17,14 @@ class BlurhashVideo {
   /// * [fps] used to specify how many hashes per second will be proceed, default to video fps
   /// * [duration] allows to cut video to specified lenght before processing, positive in seconds
   /// * [resolution] is widest side of thumbnail created from video, range from 32 to 64 pixels is enough because blurhash store just a bit of data after processing
+  /// * [quality] is quality of PNG thumbnails, values in range `[0-100]`
   static Future<List<String>> generateBlurHashes(
       {required String path,
       Directory? workingDirectory,
       int? fps,
       int? duration,
-      int resolution = 64}) async {
+      int resolution = 64,
+      int quality = 100}) async {
     SplayTreeMap<int, String> hashes = SplayTreeMap<int, String>();
 
     // temporary directory to save images
@@ -39,14 +41,15 @@ class BlurhashVideo {
 
     // setup options
     final time = duration == null ? "" : "-t $duration";
-    final frames = fps == null ? "" : "-vf fps=$fps";
+    final frames = fps == null ? "" : "fps=$fps,";
     final size =
-        "-vf \"scale=w='if(gte(iw,ih),min($resolution,iw),-2)':h='if(lt(iw,ih),min($resolution,ih),-2)'\"";
-    const quality = "-quality 100 -pix_fmt rgb24";
+        "scale=w='if(gte(iw,ih),min($resolution,iw),-2)':h='if(lt(iw,ih),min($resolution,ih),-2)'";
+    // compression_level - size/speed tradeoff, 100 is smallest file and is default, 0 - bigger file while faster
+    final q = "-quality $quality -compression_level 50 -pix_fmt rgb24";
 
     // run ffmpeg command
     final command =
-        "-hide_banner -i \"$path\" $time $frames $size $quality \"$destination/%d.png\"";
+        "-hide_banner -i \"$path\" $time -vf \"$frames$size\" $q \"$destination/%d.png\"";
     final session = await FFmpegKit.execute(command);
 
     final returnCode = await session.getReturnCode();

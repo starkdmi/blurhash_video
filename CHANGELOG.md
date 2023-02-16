@@ -21,3 +21,9 @@
 * Disable scaling up for low-res videos
 * Improve perfomance by disabling lossless compression and skipping multiple component calculations
 * Update dependencies
+
+## 0.0.6
+
+* Fix multiple filters in ffmpeg command bug
+* Increase processing speed by setting compression_level to 50
+* Option to set custom quality
