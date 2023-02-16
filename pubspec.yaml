@@ -1,7 +1,7 @@
 name: blurhash_video
 description: Blurhash algorithm applied to sequence of images extracted from video file
 repository: https://github.com/starkdmi/blurhash_video
-version: 0.0.6
+version: 0.0.7
 
 environment:
   sdk: '>=2.17.6 <3.0.0'

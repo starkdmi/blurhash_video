@@ -28,3 +28,7 @@
 * Fix input video fps upscaling
 * Increase processing speed by setting compression_level to 50
 * Option to set custom quality
+
+## 0.0.7
+
+* Update README.md
