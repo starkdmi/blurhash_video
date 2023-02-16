@@ -41,7 +41,7 @@ class BlurhashVideo {
 
     // setup options
     final time = duration == null ? "" : "-t $duration";
-    final frames = fps == null ? "" : "fps=$fps,";
+    final frames = fps == null ? "" : "fps=fps='min(source_fps,$fps/1)',";
     final size =
         "scale=w='if(gte(iw,ih),min($resolution,iw),-2)':h='if(lt(iw,ih),min($resolution,ih),-2)'";
     // compression_level - size/speed tradeoff, 100 is smallest file and is default, 0 - bigger file while faster
