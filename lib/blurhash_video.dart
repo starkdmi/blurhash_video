@@ -40,11 +40,13 @@ class BlurhashVideo {
     // setup options
     final time = duration == null ? "" : "-t $duration";
     final frames = fps == null ? "" : "-vf fps=$fps";
-    final size = "-vf \"scale='if(gt(iw,ih),$resolution,-1)':'if(gt(iw,ih),-1,$resolution)'\"";
-    const quality = "-lossless 1 -quality 100 -pix_fmt rgb24";
+    final size =
+        "-vf \"scale=w='if(gte(iw,ih),min($resolution,iw),-2)':h='if(lt(iw,ih),min($resolution,ih),-2)'\"";
+    const quality = "-quality 100 -pix_fmt rgb24";
 
     // run ffmpeg command
-    final command = "-hide_banner -i \"$path\" $time $frames $size $quality \"$destination/%d.png\"";
+    final command =
+        "-hide_banner -i \"$path\" $time $frames $size $quality \"$destination/%d.png\"";
     final session = await FFmpegKit.execute(command);
 
     final returnCode = await session.getReturnCode();
@@ -56,6 +58,7 @@ class BlurhashVideo {
     }
 
     // loop generated images
+    int? numCompX, numCompY;
     await for (final file in directory.list()) {
       // skip system files & directories if any
       if (file is! File || !file.path.endsWith(".png")) continue;
@@ -70,10 +73,12 @@ class BlurhashVideo {
       if (image == null) continue;
 
       // calculate components depending on resolution and rotation/orientation
-      final x = sqrt(16.0 * image.width / image.height);
-      final y = x * image.height / image.width;
-      final numCompX = min(x.toInt() + 1, 9);
-      final numCompY = min(y.toInt() + 1, 9);
+      if (numCompX == null || numCompY == null) {
+        final x = sqrt(16.0 * image.width / image.height);
+        final y = x * image.height / image.width;
+        numCompX = min(x.toInt() + 1, 9);
+        numCompY = min(y.toInt() + 1, 9);
+      }
 
       // generate hash
       final hash =

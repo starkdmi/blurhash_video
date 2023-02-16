@@ -29,7 +29,7 @@ class App extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({ super.key });
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -53,21 +53,21 @@ class _HomePageState extends State<HomePage> {
     _sequenceController?.dispose();
     if (_directory?.existsSync() == true) {
       await _directory?.delete(recursive: true);
-    } 
+    }
   }
 
   void _process() async {
     // reset
     if (_directory?.existsSync() == true) {
       await _directory?.delete(recursive: true);
-    } 
+    }
     setState(() {
       _count = 0;
       _directory = null;
     });
-    
+
     final temp = await getTemporaryDirectory();
-    print(temp.path);
+    // print(temp.path);
 
     // clean all previously produced cache directories
     // await BlurhashVideo.cleanUp(workingDirectory: temp);
@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
     if (path == null) return;
 
     final hashes = await BlurhashVideo.generateBlurHashes(
-      path: path, 
+      path: path,
       workingDirectory: temp,
       fps: 24, // video fps is used by default
       duration: 7, // in seconds
@@ -85,7 +85,8 @@ class _HomePageState extends State<HomePage> {
     );
 
     // temporary directory for blurred images
-    final dir = Directory("${temp.path}/blurhash_video_demo_${DateTime.now().millisecondsSinceEpoch}");
+    final dir = Directory(
+        "${temp.path}/blurhash_video_demo_${DateTime.now().millisecondsSinceEpoch}");
     await dir.create();
 
     // make blurred image from each hash
@@ -93,7 +94,7 @@ class _HomePageState extends State<HomePage> {
       final blurHash = dart.BlurHash.decode(hashes[i]);
       final image = blurHash.toImage(64, 36);
       await File("${dir.path}/blur${i.toString().padLeft(5, "0")}.png")
-        .writeAsBytes(encodePng(image));
+          .writeAsBytes(encodePng(image));
     }
 
     setState(() {
@@ -102,40 +103,43 @@ class _HomePageState extends State<HomePage> {
     });
 
     // save hashes as txt file with new line for every next one
-    final contents = hashes.fold<String>("", (content, item) => "$content$item\n");
+    final contents =
+        hashes.fold<String>("", (content, item) => "$content$item\n");
     final hashesFile = File("${dir.path}/hashes.txt");
     await hashesFile.writeAsString(contents);
     // file can be compressed via bzip which will cut down to 1/3 of size
     final hashesSize = await hashesFile.length() ~/ 1024;
     setState(() => _hashesSize = hashesSize);
 
-    // generate mp4 video with gaussian blur filter 
+    // generate mp4 video with gaussian blur filter
     final gblurFile = File("${dir.path}/gblur.mp4");
-    final gblurSession = await FFmpegKit.execute("-hide_banner -i $path -s 64x36 -t 7 -vf gblur=sigma=128:steps=4 -lossless 1 -quality 100 -an ${gblurFile.path}");
+    final gblurSession = await FFmpegKit.execute(
+        "-hide_banner -i $path -s 64x36 -t 7 -vf gblur=sigma=128:steps=4 -lossless 1 -quality 100 -an ${gblurFile.path}");
     if (!ReturnCode.isSuccess(await gblurSession.getReturnCode())) {
-      print("ffmpeg error gblur: ${await gblurSession.getOutput()}");
+      // print("ffmpeg error gblur: ${await gblurSession.getOutput()}");
       _gblurController?.dispose();
       _gblurController = null;
     } else {
       setState(() {
-      _gblurController = VideoPlayerController.file(gblurFile)..initialize()
-        .then((_) => _gblurController!.play());
+        _gblurController = VideoPlayerController.file(gblurFile)
+          ..initialize().then((_) => _gblurController!.play());
       });
     }
     final gblurSize = await gblurFile.length() ~/ 1024;
     setState(() => _gblurSize = gblurSize);
 
-    // generate mp4 video from blurred pngs 
+    // generate mp4 video from blurred pngs
     final sequenceFile = File("${dir.path}/blurred.mp4");
-    final sequenceSession = await FFmpegKit.execute("-hide_banner -framerate 24 -i ${dir.path}/blur%05d.png -vf fps=24 -t 7 -pix_fmt yuv420p ${sequenceFile.path}");
+    final sequenceSession = await FFmpegKit.execute(
+        "-hide_banner -framerate 24 -i ${dir.path}/blur%05d.png -vf fps=24 -t 7 -pix_fmt yuv420p ${sequenceFile.path}");
     if (!ReturnCode.isSuccess(await sequenceSession.getReturnCode())) {
-      print("ffmpeg error sequence: ${await sequenceSession.getOutput()}");
+      // print("ffmpeg error sequence: ${await sequenceSession.getOutput()}");
       _sequenceController?.dispose();
       _sequenceController = null;
     } else {
       setState(() {
-        _sequenceController = VideoPlayerController.file(sequenceFile)..initialize()
-          .then((_) => _sequenceController!.play());
+        _sequenceController = VideoPlayerController.file(sequenceFile)
+          ..initialize().then((_) => _sequenceController!.play());
       });
     }
     final sequenceSize = await sequenceFile.length() ~/ 1024;
@@ -149,18 +153,22 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          if (_directory != null) 
-          ...[
+          if (_directory != null) ...[
             // PNG Sequence
             ...[
               Text("PNG Sequence: $_hashesSize KB"),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.width * 0.5625,
-                child: Transform.scale(scale: MediaQuery.of(context).size.width/64, child:
-                  ImageSequenceAnimator(
+                child: Transform.scale(
+                  scale: MediaQuery.of(context).size.width / 64,
+                  child: ImageSequenceAnimator(
                     _directory!.path,
-                    "blur", 0, 5, "png", _count.toDouble(),
+                    "blur",
+                    0,
+                    5,
+                    "png",
+                    _count.toDouble(),
                     fps: 24,
                     isLooping: true,
                     isBoomerang: false,
@@ -171,29 +179,27 @@ class _HomePageState extends State<HomePage> {
             ],
 
             // MP4 from image sequence
-            if (_sequenceController?.value.isInitialized == true) 
-              ...[
-                Text("MP4 Blurhash: $_sequenceSize KB"),
-                AspectRatio(
-                  aspectRatio: _sequenceController!.value.aspectRatio,
-                  child: VideoPlayer(_sequenceController!),
-                ),
-              ],
-            
+            if (_sequenceController?.value.isInitialized == true) ...[
+              Text("MP4 Blurhash: $_sequenceSize KB"),
+              AspectRatio(
+                aspectRatio: _sequenceController!.value.aspectRatio,
+                child: VideoPlayer(_sequenceController!),
+              ),
+            ],
+
             // MP4 ffmpeg blur effect
-            if (_gblurController?.value.isInitialized == true) 
-              ...[
-                Text("MP4 Gaussian ffmpeg: $_gblurSize KB"),
-                AspectRatio(
-                  aspectRatio: _gblurController!.value.aspectRatio,
-                  child: VideoPlayer(_gblurController!),
-                ),
-              ]
-          ]
-          else 
-            const Center(child: 
-              Text("Select a video", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18))
-            ),
+            if (_gblurController?.value.isInitialized == true) ...[
+              Text("MP4 Gaussian ffmpeg: $_gblurSize KB"),
+              AspectRatio(
+                aspectRatio: _gblurController!.value.aspectRatio,
+                child: VideoPlayer(_gblurController!),
+              ),
+            ]
+          ] else
+            const Center(
+                child: Text("Select a video",
+                    style:
+                        TextStyle(fontWeight: FontWeight.w500, fontSize: 18))),
         ],
       ),
       floatingActionButton: FloatingActionButton(

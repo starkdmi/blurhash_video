@@ -15,8 +15,8 @@ dependencies:
   video_player: ^2.4.10
   path_provider: ^2.0.11
   file_picker: ^5.2.4
-  image: ^3.2.2
-  blurhash_dart: ^1.1.0
+  image: ^4.0.15
+  blurhash_dart: ^1.2.1
   ffmpeg_kit_flutter_full_gpl: ^5.1.0 
   blurhash_video: 
     path: ../

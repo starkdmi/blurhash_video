@@ -1,7 +1,7 @@
 name: blurhash_video
 description: Blurhash algorithm applied to sequence of images extracted from video file
 repository: https://github.com/starkdmi/blurhash_video
-version: 0.0.4
+version: 0.0.5
 
 environment:
   sdk: '>=2.17.6 <3.0.0'
@@ -16,8 +16,8 @@ dependencies:
   path_provider: ^2.0.11
 
   # Image manipulation
-  image: ^3.2.2
-  blurhash_dart: ^1.1.0
+  image: ^4.0.15
+  blurhash_dart: ^1.2.1
 
   # Video processing
   ffmpeg_kit_flutter_full_gpl: ^5.1.0 
