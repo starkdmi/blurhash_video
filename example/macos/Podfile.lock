@@ -1,0 +1,50 @@
+PODS:
+  - ffmpeg-kit-macos-full-gpl (5.1)
+  - ffmpeg_kit_flutter_full_gpl (5.1.0):
+    - ffmpeg_kit_flutter_full_gpl/full-gpl (= 5.1.0)
+    - FlutterMacOS
+  - ffmpeg_kit_flutter_full_gpl/full-gpl (5.1.0):
+    - ffmpeg-kit-macos-full-gpl (= 5.1)
+    - FlutterMacOS
+  - FlutterMacOS (1.0.0)
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
+  - path_provider_macos (0.0.1):
+    - FlutterMacOS
+  - sqflite (0.0.2):
+    - FlutterMacOS
+    - FMDB (>= 2.7.5)
+
+DEPENDENCIES:
+  - ffmpeg_kit_flutter_full_gpl (from `Flutter/ephemeral/.symlinks/plugins/ffmpeg_kit_flutter_full_gpl/macos`)
+  - FlutterMacOS (from `Flutter/ephemeral`)
+  - path_provider_macos (from `Flutter/ephemeral/.symlinks/plugins/path_provider_macos/macos`)
+  - sqflite (from `Flutter/ephemeral/.symlinks/plugins/sqflite/macos`)
+
+SPEC REPOS:
+  trunk:
+    - ffmpeg-kit-macos-full-gpl
+    - FMDB
+
+EXTERNAL SOURCES:
+  ffmpeg_kit_flutter_full_gpl:
+    :path: Flutter/ephemeral/.symlinks/plugins/ffmpeg_kit_flutter_full_gpl/macos
+  FlutterMacOS:
+    :path: Flutter/ephemeral
+  path_provider_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/path_provider_macos/macos
+  sqflite:
+    :path: Flutter/ephemeral/.symlinks/plugins/sqflite/macos
+
+SPEC CHECKSUMS:
+  ffmpeg-kit-macos-full-gpl: 13b2ae9d0189535dd4566a73354ff62624a723e9
+  ffmpeg_kit_flutter_full_gpl: 4692cad8285a8ce169bc19535b12374fd0407d80
+  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  path_provider_macos: 3c0c3b4b0d4a76d2bf989a913c2de869c5641a19
+  sqflite: a5789cceda41d54d23f31d6de539d65bb14100ea
+
+PODFILE CHECKSUM: 0d3963a09fc94f580682bd88480486da345dc3f0
+
+COCOAPODS: 1.13.0
